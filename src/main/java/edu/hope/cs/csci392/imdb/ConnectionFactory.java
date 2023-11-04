@@ -3,35 +3,69 @@ package edu.hope.cs.csci392.imdb;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+
+@Service
 public class ConnectionFactory {
-	private static final String DRIVER_CLASS = "";
-	private static String connectionString = "jdbc:sqlserver://sql.cs.hope.edu\\CSSQL:1433;user=you;password=secret";
-	static {
-		//  Use class.forName to ensure that the classes implementing the JTDS JDBC driver are loaded
-		try {
-			Class.forName(DRIVER_CLASS);
+
+	@Value("${USERNAME_392}")
+	private String username;
+
+	@Value("${PASSWORD_392}")
+	private String password;
+
+	@Value("${spring.datasource.driver-class-name}")
+	private String driverClass = "";
+
+	@Value("${spring.datasource.url}")
+	private String serverUrl;
+
+	private boolean driverFound;
+
+	private String connectionString;
+
+	public ConnectionFactory() {
+		
+	}
+
+	/**
+	 * This method will be called by spring after the construction of a ConnectionFactory instance is 
+	 * complete.  In particular, the values of the injected fields serverUrl, driverClass, username, 
+	 * and password will have been set from the operating system's environment variables and / or the 
+	 * values specified in application.yml
+	 */
+	@PostConstruct
+	public void loadDriver () {
+		driverFound = false;
+		try {			
+			connectionString = String.format(
+				"%s;user=%s;password:%s", 
+				serverUrl, username, password);
+			Class.forName(driverClass);
 			driverFound = true;
 		} catch (ClassNotFoundException e) {
 			driverFound = false;
 		}
 	}
-	
-	static boolean driverFound;
-	
+		
+
 	/**
 	 * Creates a java.sql.Connection object that is attached to a database.
 	 * 
 	 * @return
 	 */
-	public static Connection getConnection () {
+	public Connection getConnection() {
 		if (!driverFound) {
-			throw new RuntimeException ("Could not find the JDBC driver (" + DRIVER_CLASS + ").  Please ensure you have the appropriate JAR file on your class path");
+			throw new RuntimeException("Could not find the JDBC driver (" + driverClass
+					+ ").  Please ensure you have the appropriate JAR file on your class path");
 		}
-		
+
 		try {
 			return DriverManager.getConnection(connectionString);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}

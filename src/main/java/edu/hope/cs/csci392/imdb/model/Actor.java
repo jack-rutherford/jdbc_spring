@@ -1,10 +1,5 @@
 package edu.hope.cs.csci392.imdb.model;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import edu.hope.cs.csci392.imdb.Database;
-
 public class Actor {
 	
 	private String personID;
@@ -69,10 +64,5 @@ public class Actor {
 
 	public int getDeathYear() {
 		return deathYear;
-	}
-
-	public List<Role> getRoles () throws SQLException {
-		Database database = Database.getInstance();
-		return database.findMoviesForActor(this);
 	}
 }

@@ -2,7 +2,8 @@ package edu.hope.cs.csci392.imdb.model;
 
 import java.sql.SQLException;
 
-import edu.hope.cs.csci392.imdb.Database;
+import edu.hope.cs.csci392.imdb.services.ActorService;
+import edu.hope.cs.csci392.imdb.services.MovieService;
 
 public class Role {
 	private String personID;
@@ -12,7 +13,7 @@ public class Role {
 	private int creditNumber;
 	private Movie movie;
 	private Actor actor;
-	
+		
 	public Role (String personID, String titleID, String role, String category, int creditNumber) {
 		this.personID = personID;
 		this.titleID = titleID;
@@ -42,18 +43,16 @@ public class Role {
 		return creditNumber;
 	}
 	
-	public Actor getActor () throws SQLException {
-		if (actor == null) {
-			Database database = Database.getInstance();
-			actor = database.findActorByID(personID);
+	public Actor getActor (ActorService actorService) throws SQLException {
+		if (actor == null) {			
+			actor = actorService.findActorByID(personID);
 		}
 		return actor; 
 	}
 	
-	public Movie getMovie () throws SQLException {
+	public Movie getMovie (MovieService movieService) throws SQLException {
 		if (movie == null) {
-			Database database = Database.getInstance();
-			movie = database.findMovieByID(titleID);
+			movie = movieService.findMovieByID(titleID);
 		}
 		return movie; 
 	}
