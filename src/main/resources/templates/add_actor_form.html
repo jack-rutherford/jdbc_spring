@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <title>IMDB Web Interface - Add an Actor</title>        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+            integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles.css">            
+    </head>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Add an actor</h1>
+            <form class="form-horizontal" method="post" th:action="@{/add_actor}" th:object="${actor}">
+                <div class="form-group required">
+                    <div class="col-12 col-md-6">
+                        <input type="text" class="form-control"
+                            name="fullName" placeholder="Actor's full name">
+                    </div>
+                </div>
+    
+                <div class="form-group required">
+                    <div class="col-12 col-md-6">
+                        <input type="text" class="form-control"
+                            name="firstName" placeholder="First name">
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="text" class="form-control" name="middleName"
+                            placeholder="Middle name">
+                    </div>
+                </div>
+    
+                <div class="form-group required">
+                    <div class="col-12 col-md-6">
+                        <input type="text" class="form-control" name="lastName"
+                            placeholder="Last Name">
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="text" class="form-control" name="suffix"
+                            placeholder="Suffix">
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="number" class="form-control" name="birthYear"
+                            placeholder="Year born">
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="number" class="form-control" name="*{deathYear}"
+                            placeholder="Year died">
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="col-md-4 col-sm-12">
+                        <input class="btn btn-primary" type="submit" value="Add">                                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

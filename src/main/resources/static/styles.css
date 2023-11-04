@@ -1,0 +1,29 @@
+
+
+body {
+    background-color: rgb(64, 64, 64);
+    display:flex;
+    flex-direction: column;
+    min-height: 95vh;
+    /* margin-bottom: 5ex; */
+}
+
+h1 {
+    text-align: center;    
+}
+
+h2 {
+    border-bottom: 1px solid lightgray;
+}
+
+.container {
+    background-color: white;
+    margin-top: 2ex;
+    padding-top: 1ex;
+    padding-bottom: 1ex;
+    flex-grow: 1;
+}
+
+.form-row {
+    margin-bottom: 2ex;
+}
