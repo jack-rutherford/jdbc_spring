@@ -31,12 +31,12 @@
 					<td th:text="${movie.genresAsCommaSeparatedString}"></td>
 					<td th:text="${movie.imdbRating}"></td>
 					<td th:text="${movie.numberOfRatingsAsString}"></td>
-                    <td><a class="btn btn-primary" th:href="${'movie/' + movie.titleId + '/cast'}">Cast</a></td>			
+                    <td><a class="btn btn-dark" th:href="${'movie/' + movie.titleId + '/cast'}">Cast</a></td>			
 				</tr>
 			</tbody>
 		</table>
 
-        <a class="btn btn-primary" href="/movie_search_form">New Search</a>
+        <a class="btn btn-dark" href="/movie_search_form">New Search</a>
     </div>
 </body>
 
