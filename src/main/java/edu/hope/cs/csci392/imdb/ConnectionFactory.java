@@ -47,7 +47,7 @@ public class ConnectionFactory {
 
 		try {			
 			connectionString = String.format(
-				"%s;user=%s;password:%s", 
+				"jdbc:sqlserver://%s;user=%s;password=%s;trustServerCertificate=true", 
 				serverUrl, username, password);
 			Class.forName(driverClass);
 			driverFound = true;
@@ -71,8 +71,11 @@ public class ConnectionFactory {
 		}
 
 		try {
-			return DriverManager.getConnection(connectionString);
+			Connection conn = DriverManager.getConnection(connectionString);
+			System.err.println("Succesfully established a connection");
+			return conn;
 		} catch (Exception e) {
+			System.err.println("Unable to connect to database: " + e.getMessage());
 			return null;
 		}
 	}
