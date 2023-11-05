@@ -5,6 +5,7 @@
     </head>
     <body>
         <div class="container">
+            <div th:replace="~{fragments/navbar :: navbar}"></div>
             <h1>Add an actor</h1>
             <form class="form-horizontal" method="post" th:action="@{/add_actor}" th:object="${actor}">
                 <div class="form-group required">

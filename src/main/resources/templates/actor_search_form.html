@@ -4,7 +4,7 @@
     </head>
     <body>
         <div class="container">
-    
+            <div th:replace="~{fragments/navbar :: navbar}"></div>
             <h2>Search for an actor</h2>
             <form class="form-horizontal" th:action="@{/actor_search}" th:object="${searchParameters}" method="post">
                 <div class="form-row">
