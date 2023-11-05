@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="fragments/head_content :: head(pageTitle='Roles in ' + ${movie.title})" th:remove="tag"></div>
+    <div th:replace="~{fragments/head_content :: head(pageTitle='Roles in ' + ${movie.title})}" th:remove="tag"></div>
 </head>
 <body>
     <div class="container">
-        <div th:replace="fragments/navbar :: navbar"></div>
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
         <h1>Cast of <span th:text="${movie.title}"></span></h1>
 
         <table class="table table-bordered table-striped">

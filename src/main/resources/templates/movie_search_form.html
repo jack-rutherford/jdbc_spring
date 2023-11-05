@@ -1,11 +1,12 @@
 <html>
 
 <head>
-    <div th:replace="fragments/head_content :: head(pageTitle='Movie Search')" th:remove="tag"></div>
+    <div th:replace="~{fragments/head_content :: head(pageTitle='Movie Search')}" th:remove="tag"></div>
 </head>
 
 <body>
     <div class="container mt-3">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
         <h1>Find a Movie</h1>
         <form class="form-horizontal" th:action="@{movie_search}" th:object="${searchParameters}" method="post">
             <div class="form-row">

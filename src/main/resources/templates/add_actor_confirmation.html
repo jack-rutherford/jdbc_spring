@@ -1,6 +1,6 @@
 <html>
     <head>
-        <div th:replace="fragments/head_content :: head(pageTitle=${entityName} + ' added successfully')" th:remove="tag"></div>
+        <div th:replace="~{fragments/head_content :: head(pageTitle=${entityName} + ' added successfully')}" th:remove="tag"></div>
     </head>
 
     <body>
