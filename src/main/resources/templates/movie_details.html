@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <div th:replace="~{fragments/head_content :: head(pageTitle='Details for ' + ${movie.getTitle()} + ' ( ' + ${movie.getYearReleased()} + ')')}" th:remove="tag"></div>     
+    </head>
+
+    <body>
+        <div class="container">   
+            <div th:replace="~{fragments/navbar :: navbar}"></div> 
+            <h1>Details for <span th:text="${movie.getTitle()}"></span></h1>
+
+            <table class="details-table">
+                <tbody>
+                    <tr>
+                        <th>Title</th>
+                        <td th:text="${movie.getTitle()}"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Released in</th>
+                        <td th:text="${movie.getYearReleased()}"></td>
+                    </tr>
+                         
+                    <tr th:if="${hasPrimaryGenre}">
+                        <th>Primary Genre</th>
+                        <td th:text="${movie.getPrimaryGenre()}"></td>
+                    </tr>
+
+                    <tr th:if="${hasMPAARating}">
+                        <th>MPAA Rating</th>
+                        <td th:text="${movie.getMpaaRating()}"></td>
+                    </tr>
+
+                    <tr th:if="${movie.runningTimeInMinutes > 0}">
+                        <th>Running time</th>
+                        <td th:text="${movie.getRunningTimeHoursAndMinutes()}"></td>
+                    </tr>
+
+                    <div th:remove="tag" th:if="${movie.getNumberOfRatings() > 0}">
+                        <tr>
+                            <th>IMDB Rating</th>
+                            <td th:text="${movie.getImdbRating()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Number of Ratings</th>
+                            <td th:text="${movie.getNumberOfRatingsAsString()}"></td>
+                        </tr>
+                    </div>
+
+                    <tr th:if="${movie.getGenres().size() > 0}">
+                        <th>Genres</th>
+                        <td th:text="${movie.getGenresAsCommaSeparatedString()}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

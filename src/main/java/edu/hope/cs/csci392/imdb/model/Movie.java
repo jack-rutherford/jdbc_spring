@@ -1,62 +1,43 @@
 package edu.hope.cs.csci392.imdb.model;
 
 import java.util.List;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 import java.util.ArrayList;
 
+@Data
+@Accessors(chain = true)
 public class Movie {
-	private String titleID;
+	private String titleId;
 	private String title;	
 	private int yearReleased;
 	private int runningTimeInMinutes;
 	private String primaryGenre;
+	private String mpaaRating;
 	private float imdbRating;
 	private int numberOfRatings;
 	private List<String> genres;
 	
+	public Movie () {
+		genres = new ArrayList<String> (4);
+	}
+	
 	public Movie (
 		String titleID, String title, int yearReleased, 
-		int lengthInMinutes, String primaryGenre
+		int lengthInMinutes, String primaryGenre, String mpaaRating
 	) {
-		this.titleID = titleID;
+		this();
+		this.titleId = titleID;
 		this.title = title;
 		this.yearReleased = yearReleased;
 		this.runningTimeInMinutes = lengthInMinutes;
 		this.primaryGenre = primaryGenre;
-		this.genres = new ArrayList<String>();
+		this.mpaaRating = mpaaRating;		
 	}
-
-	public String getTitleId() {
-		return titleID;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public int getYearReleased() {
-		return yearReleased;
-	}
-
-	public int getLengthInMinutes() {
-		return runningTimeInMinutes;
-	}
-
-	public String getPrimaryGenre() {
-		return primaryGenre;
-	}
-
-	public float getImdbRating() {
-		return imdbRating;
-	}
-
-	public void setImdbRating(float rating) {
-		this.imdbRating = rating;
-	}
-
-	public int getNumberOfRatings() {
-		return numberOfRatings;
-	}
-
+	
 	public String getNumberOfRatingsAsString() {
 		if (numberOfRatings < 1000) {
 			return String.valueOf(numberOfRatings);
@@ -71,14 +52,6 @@ public class Movie {
 			int hundredThousands = numberOfRatings / 100000;
 			return String.valueOf(millions) + "." + String.valueOf(hundredThousands) + "M";
 		}
-	}
-
-	public void setNumberOfRatings(int numRatings) {
-		this.numberOfRatings = numRatings;
-	}
-	
-	public List<String> getGenres() {
-		return genres;
 	}
 	
 	public String getGenresAsCommaSeparatedString () {

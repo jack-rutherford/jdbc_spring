@@ -194,4 +194,25 @@ public class MovieController {
         model.addAttribute("errors", errors);
         return "movie_roles";
     }
+
+    @GetMapping("movie/{titleId}")
+    public String showMovieDetails(@PathVariable String titleId, Model model) {
+        List<String> errors = new LinkedList<String>();
+
+        try {
+            Movie movie = movieService.findMovieByID(titleId);
+            model.addAttribute("movie", movie);
+            
+            boolean hasPrimaryGenre = movie.getPrimaryGenre() != null && !movie.getPrimaryGenre().equals("");
+            model.addAttribute("hasPrimaryGenre", hasPrimaryGenre);
+
+            boolean hasMPAARating = movie.getMpaaRating() != null && !movie.getMpaaRating().equals("");
+            model.addAttribute("hasMPAARating", hasMPAARating);
+        }
+        catch (SQLException e) {
+            errors.add("Error occurred retrieving movie details for " + titleId + "; " + e.getMessage());
+        }
+        model.addAttribute("errors", errors);
+        return "movie_details";
+    }
 }

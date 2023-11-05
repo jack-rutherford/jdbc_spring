@@ -15,11 +15,11 @@ public class Database {
 	);
 	
 	public static Movie sleepless = new Movie (
-		"tt0108160", "Sleepless in Seattle", 1993, 105, "Comedy"
+		"tt0108160", "Sleepless in Seattle", 1993, 105, "Comedy", "PG"
 	);
 	
 	public static Movie mail = new Movie (
-			"tt0128853", "You've got mail", 1998, 119, "Comedy"
+			"tt0128853", "You've got mail", 1998, 119, "Comedy", "PG"
 	);
 		
 	public static Role ryanSleepless = new Role (
