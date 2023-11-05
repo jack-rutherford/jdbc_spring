@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <div th:replace="~{fragments/head_content :: head(pageTitle='Add an actor')}" th:remove="tag"></div>           
+    </head>
+    </head>
+    <body>
+        <div class="container">
+            <div th:replace="~{fragments/navbar :: navbar}"></div>
+            <h1>Add a movie</h1>
+            <form class="form-horizontal" method="post" th:action="@{/add_movie}" th:object="${movie}">
+                <div class="form-group required">
+                    <div class="col-12 col-md-6">
+                        <input type="text" class="form-control"
+                            name="title" placeholder="Movie Title">
+                    </div>
+                </div>
+    
+                <div class="form-group required">
+                    <div class="col-12 col-md-6">
+                        <input type="number" class="form-control"
+                            name="yearReleased" placeholder="Year Released">
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <div th:replace="~{fragments/mpaaRatingSelect :: mpaaRatingSelect('MPAA Rating')}"></div>
+                    </div>
+                </div>
+    
+                <div class="form-group required">
+                    <div class="col-12 col-md-6">
+                        <div th:replace="~{fragments/genreSelect :: genreSelect('primaryGenre', 'Primary Genre')}"></div>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="number" class="form-control" name="runningTimeInMinutes"
+                            placeholder="Running time (minutes)" min="0" max="600" step="5">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="number" class="form-control" name="imdbRating"
+                            placeholder="IMDB Rating" min="0" max="10" step="0.1">
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="col-12 col-md-6">
+                        <input type="number" class="form-control" name="numberRatings"
+                            placeholder="Number of IMDB Ratings">
+                    </div>
+                </div>                    
+    
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-12">
+                        <input class="btn btn-dark" type="submit" value="Add">                                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

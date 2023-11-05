@@ -1,0 +1,8 @@
+<th:block th:fragment="mpaaRatingSelect(label)">
+    <select name="mpaaRating" class="form-control">
+        <option value="null" th:text="${label}"></option>
+        <option th:each="rating: ${mpaaRatings}">
+            <span th:text="${rating}"></span>
+        </option>
+    </select>
+</th:block>

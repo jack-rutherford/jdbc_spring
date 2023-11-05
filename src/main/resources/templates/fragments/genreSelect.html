@@ -1,0 +1,8 @@
+<th:block th:fragment="genreSelect(controlName, label)">
+    <select th:name="${controlName}" class="form-control">
+        <option value="null" th:text="${label}"></option>
+        <option th:each="genre: ${genres}">
+            <span th:text="${genre}"></span>
+        </option>
+    </select>
+</th:block>

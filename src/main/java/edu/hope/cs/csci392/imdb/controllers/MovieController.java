@@ -78,6 +78,26 @@ public class MovieController {
         return "movie_search_form";
     }
 
+    @GetMapping("add_movie_form") 
+    public String addMovieForm (Model model) {
+        List<String> errors = new LinkedList<String> ();
+
+        try {
+            model.addAttribute("mpaaRatings", ratingsService.findMPAARatings());
+        } catch (SQLException e) {
+            errors.add("An error occurred downloading the mpaa ratings: " + e.getMessage());
+        }
+
+        try {
+            model.addAttribute("genres", genreService.findGenres());
+        } catch (SQLException e) {
+            errors.add("An error occurred downloading the genres: " + e.getMessage());            
+        }
+        
+        model.addAttribute("errors", errors);
+        return "add_movie_form";
+    }
+
     @PostMapping("movie_search")
     public String performMovieSearch(@ModelAttribute MovieSearchRequest q, Model model) {        
         List<Principal> people = new LinkedList<Principal>();        
