@@ -1,11 +1,6 @@
 <html>
     <head>
         <div th:replace="~{fragments/head_content :: head(pageTitle='Details for ' + ${actor.getFullName()})}" th:remove="tag"></div> 
-        <style>
-            th {
-                padding-right: 2em;
-            }
-        </style>       
     </head>
 
     <body>
@@ -13,7 +8,7 @@
             <div th:replace="~{fragments/navbar :: navbar}"></div> 
             <h1>Details for <span th:text="${actor.getFullName()}"></span></h1>
 
-            <table>
+            <table class="details-table">
                 <tbody>
                     <tr>
                         <th>First name</th>
