@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import edu.hope.cs.csci392.imdb.model.Actor;
@@ -32,6 +33,29 @@ public class ActorController {
     @Autowired
     private ActorService actorService;
     
+    @GetMapping("actor/{actorId}")
+    public String showActorDetails(@PathVariable String actorId, Model model) {
+        List<String> errors = new LinkedList<String>();
+
+        try {
+            Actor actor = actorService.findActorByID(actorId);
+            model.addAttribute("actor", actor);
+
+            boolean hasMiddleName = actor.getMiddleName() != null && !actor.getMiddleName().equals("");
+            model.addAttribute("hasMiddleName", hasMiddleName);
+
+            boolean hasSuffix = actor.getSuffix() != null && !actor.getSuffix().equals("");
+            model.addAttribute("hasSuffix", hasSuffix);
+
+        }
+        catch (SQLException e) {
+            errors.add("Exception occurred find actor with ID " + actorId + "; " + e.getMessage());
+        }
+
+        model.addAttribute("errors", errors);
+        return "actor_details";
+    }
+
     @GetMapping("actor_search_form")
     public String actorSearchForm() {
         return "actor_search_form";
