@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="fragments/head_content :: head(pageTitle='Roles in ' + ${movie.title})" th:remove="tag"></div>
+</head>
+<body>
+    <div class="container">
+        <h1>Cast of <span th:text="${movie.title}"></span></h1>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Actor Name</th>
+                    <th>Category</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="role: ${movieRoles}">
+                    <td th:text="${role.fullName}"></td>
+                    <td th:text="${role.category}"></td>
+                    <td th:text="${role.role}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

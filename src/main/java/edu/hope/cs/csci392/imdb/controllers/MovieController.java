@@ -10,10 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import edu.hope.cs.csci392.imdb.model.Actor;
 import edu.hope.cs.csci392.imdb.model.Movie;
 import edu.hope.cs.csci392.imdb.model.Principal;
+import edu.hope.cs.csci392.imdb.model.Role;
+import edu.hope.cs.csci392.imdb.services.ActorService;
 import edu.hope.cs.csci392.imdb.services.CategoryService;
 import edu.hope.cs.csci392.imdb.services.GenreService;
 import edu.hope.cs.csci392.imdb.services.MovieService;
@@ -33,10 +37,13 @@ public class MovieController {
         String person3Name, String person3Role
     ) {}
 
+    public record ActorRole (String fullName, String category, String role) {}
+
     @Autowired private MovieService movieService;
     @Autowired private MpaaRatingsService ratingsService;
     @Autowired private GenreService genreService;
     @Autowired private CategoryService categoryService;
+    @Autowired private ActorService actorService;
 
     @GetMapping("movie_search_form")
     public String movieSearchForm(Model model) {        
@@ -136,5 +143,35 @@ public class MovieController {
         model.addAttribute("errors", errors);
 
         return "movie_search_results";
+    }
+
+    @GetMapping("movie/{titleId}/cast")
+    public String getRolesForMovie(@PathVariable("titleId") String titleId, Model model)
+    {
+        List<String> errors = new LinkedList<String>();
+        try {
+            Movie movie = movieService.findMovieByID(titleId); 
+            List<Role> roles = movieService.findRolesInMovie(movie);
+
+            LinkedList<ActorRole> actorRoles = new LinkedList<ActorRole> ();
+            
+            for (Role role : roles) {
+                Actor actor = role.getActor(actorService);
+                ActorRole actorRole = new ActorRole (
+                    actor.getFullName(),
+                    role.getCategory(),
+                    role.getRole()
+                );
+                actorRoles.add(actorRole);
+            }
+
+            model.addAttribute("movie", movie);
+            model.addAttribute("movieRoles", actorRoles);
+        } catch (SQLException e) {
+            errors.add("Error occurred loading the movie with TitleId = " + titleId + "; " + e.getMessage());
+        }
+
+        model.addAttribute("errors", errors);
+        return "movie_roles";
     }
 }

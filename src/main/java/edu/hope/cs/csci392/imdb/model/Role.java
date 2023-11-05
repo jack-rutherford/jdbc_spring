@@ -19,6 +19,7 @@ public class Role {
 		this.titleID = titleID;
 		this.role = role;
 		this.creditNumber = creditNumber;
+		this.category = category;
 		movie = null;
 		actor = null;
 	}
@@ -47,6 +48,7 @@ public class Role {
 		if (actor == null) {			
 			actor = actorService.findActorByID(personID);
 		}
+		String fullName = actor.getFullName();
 		return actor; 
 	}
 	
