@@ -40,14 +40,21 @@ public class ConnectionFactory {
 	@PostConstruct
 	public void loadDriver () {
 		driverFound = false;
+		if (driverClass != "") {
+			System.err.println("JDBC driver class not specified; skipping loading driver class".toUpperCase());
+			return;
+		}
+
 		try {			
 			connectionString = String.format(
 				"%s;user=%s;password:%s", 
 				serverUrl, username, password);
 			Class.forName(driverClass);
 			driverFound = true;
+			System.err.println("Successfully loaded JDBC driver: " + driverClass.toUpperCase());
 		} catch (ClassNotFoundException e) {
 			driverFound = false;
+			System.err.println("Driver class " + driverClass + " is not available on the classpath".toUpperCase());
 		}
 	}
 		
