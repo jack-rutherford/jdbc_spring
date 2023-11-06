@@ -89,7 +89,7 @@ public class MovieController {
     @GetMapping("add_movie_form")
     public String addMovieForm(Model model) {
         List<String> errors = new LinkedList<String>();
-
+        
         try {
             model.addAttribute("mpaaRatings", ratingsService.findMPAARatings());
         } catch (SQLException e) {
@@ -102,7 +102,10 @@ public class MovieController {
             errors.add("An error occurred downloading the genres: " + e.getMessage());
         }
 
-        model.addAttribute("errors", errors);
+        if (errors.size() > 0) {
+            model.addAttribute("errors", errors);
+            return "display_errors";
+        }
         return "add_movie_form";
     }
 
