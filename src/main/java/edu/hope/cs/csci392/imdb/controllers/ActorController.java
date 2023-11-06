@@ -39,6 +39,11 @@ public class ActorController {
 
         try {
             Actor actor = actorService.findActorByID(actorId);
+            if (actor == null) {
+                model.addAttribute("entityType", "actor");
+                model.addAttribute("id", actorId);
+                return "entity_not_found";
+            }
             model.addAttribute("actor", actor);
 
             boolean hasMiddleName = actor.getMiddleName() != null && !actor.getMiddleName().equals("");
@@ -52,7 +57,11 @@ public class ActorController {
             errors.add("Exception occurred find actor with ID " + actorId + "; " + e.getMessage());
         }
 
-        model.addAttribute("errors", errors);
+        if (errors.size() > 0) {
+            model.addAttribute("errors", errors);
+            return "display_errors";
+        }
+
         return "actor_details";
     }
 
@@ -73,10 +82,14 @@ public class ActorController {
             model.addAttribute("actors", actors);
             model.addAttribute("actorOrActors", actors.size() > 1 ? "actors" : "actor");
         } catch (SQLException e) {
-            errors.add("An error occurred eecuting Database.findActors: " + e.getMessage());
+            errors.add("An error occurred eecuting ActorService.findActors: " + e.getMessage());
         }
 
-        model.addAttribute("errors", errors);
+        if (errors.size() > 0) {
+            model.addAttribute("errors", errors);
+            return "display_errors";
+        }
+
         return "actor_search_results";
     }
 
@@ -105,9 +118,11 @@ public class ActorController {
             errors.add("An error occurred trying to add the actor to the database: " + e.getMessage());
         }
 
-        model.addAttribute("errors", errors);
+        if (errors.size() > 0) {
+            model.addAttribute("errors", errors);
+            return "display_errors";
+        }
         
-
         return "add_actor_confirmation";
     }
 
