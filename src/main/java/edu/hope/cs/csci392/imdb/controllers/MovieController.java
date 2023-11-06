@@ -115,7 +115,7 @@ public class MovieController {
         List<String> genres = new LinkedList<String>();
 
         List<String> errors = new LinkedList<String>();
-
+        
         int runningTime = q.runningTime.isPresent() ? q.runningTime.get() : -1;
         float minimumIMDBRating = q.IMDBRating.isPresent() ? q.IMDBRating.get() : -1;
 
@@ -167,8 +167,10 @@ public class MovieController {
             errors.add("An exception occurred trying to find the movies: " + e.getMessage());
         }
 
-        model.addAttribute("errors", errors);
-
+        if (errors.size() > 0) {
+            model.addAttribute("errors", errors);
+            return "display_errors";
+        }
         return "movie_search_results";
     }
 
