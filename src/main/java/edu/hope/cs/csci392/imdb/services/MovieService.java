@@ -1,6 +1,7 @@
 package edu.hope.cs.csci392.imdb.services;
 
 import java.sql.SQLException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,10 +82,14 @@ public class MovieService {
 	 * rows that it is returning
 	 */
 	public List<Integer> getMovieYears() throws SQLException {
-		List<Integer> possibleYears = new ArrayList<Integer>();
-		for (int i = 2023; i >= 2000; i--) {
+		List<Integer> possibleYears = new ArrayList<Integer>();		
+		int maxYear = Year.now().getValue();
+		int minYear = maxYear - 20;
+
+		for (int i = maxYear; i > minYear; i--) {
 			possibleYears.add(i);
 		}
+
 		return possibleYears;
 	}
 
