@@ -72,11 +72,17 @@ public class ActorController {
 
     @PostMapping("actor_search")
     public String search(@ModelAttribute ActorSearchRequest q, Model model) {
-        int birthYear = q.birthYear.isPresent() ? q.birthYear.get() : -1;
-        int deathYear = q.deathYear.isPresent() ? q.deathYear.get() : -1;
-
         List<String> errors = new LinkedList<String>();
 
+        if (q.firstName.isEmpty() && q.lastName.isEmpty() && !q.birthYear.isPresent() && !q.deathYear.isPresent()) {
+            errors.add("You must specify at least one parameter when searching for an actors");
+            model.addAttribute("errors", errors);
+            return "display_errors";
+        }
+
+        int birthYear = q.birthYear.isPresent() ? q.birthYear.get() : -1;
+        int deathYear = q.deathYear.isPresent() ? q.deathYear.get() : -1;
+                
         try {
             List<Actor> actors = actorService.findActors(q.firstName(), q.lastName(), birthYear, deathYear);
             model.addAttribute("actors", actors);
