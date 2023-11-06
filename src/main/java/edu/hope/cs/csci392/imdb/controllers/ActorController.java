@@ -75,7 +75,7 @@ public class ActorController {
         List<String> errors = new LinkedList<String>();
 
         if (q.firstName.isEmpty() && q.lastName.isEmpty() && !q.birthYear.isPresent() && !q.deathYear.isPresent()) {
-            errors.add("You must specify at least one parameter when searching for an actors");
+            errors.add("You must specify at least one parameter when searching for  actors");
             model.addAttribute("errors", errors);
             return "display_errors";
         }
