@@ -40,10 +40,14 @@ public class ActorService {
 	 * Finds the actors that match the given conditions.  Only those 
 	 * parameters that have non-empty values are included in the query.  
 	 * Those parameters that are included are combined using AND.
-	 * @param firstName the first name of the actor(s) to locate
-	 * @param lastName the last name of the actor(s) to locate
-	 * @param birthYear the year when the actor(s) to locate were born
-	 * @param deathYear the year when the actor(s) to locate died
+	 * @param firstName the first name of the actor(s) to locate, or the empty string 
+	 * if firstName should not be included in the query
+	 * @param lastName the last name of the actor(s) to locate, or the empty string
+	 * if lastName should not be included in the query
+	 * @param birthYear the year when the actor(s) to locate were born, or -1 if
+	 * birthYear should not be included in the query
+	 * @param deathYear the year when the actor(s) to locate died, or -1 if
+	 * deathYear should not be included in the query
 	 * @return a List of Actor objects representing the actor(s) matching the
 	 * specified conditions
 	 * @throws SQLException if an exception occurs connecting to the DB,
