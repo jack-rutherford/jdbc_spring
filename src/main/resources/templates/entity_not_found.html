@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <div
+      th:replace="~{fragments/head_content :: head(pageTitle=${entityType} + ' not found')}"
+      th:remove="tag"
+    ></div>
+  </head>
+
+  <body>
+    <div class="container">
+      <div th:replace="~{fragments/navbar :: navbar}"></div>
+      <h1><span th:text="${#strings.capitalize(entityType)}"></span> not found</h1>
+      <p>
+        The <span th:text="${entityType}"></span> with ID
+        <strong th:text="${id}"></strong> does not exist
+      </p>
+    </div>
+  </body>
+</html>

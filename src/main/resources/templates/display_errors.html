@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <div
+      th:replace="~{fragments/head_content :: head(pageTitle='Error processing request')}"
+      th:remove="tag"
+    ></div>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="alert alert-danger">
+        <p>One or more errors occurred while processing this request</p>
+        <ul>
+          <li th:each="error: ${errors}"><span th:text="${error}"></span></li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

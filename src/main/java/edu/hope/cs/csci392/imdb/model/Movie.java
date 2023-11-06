@@ -3,7 +3,6 @@ package edu.hope.cs.csci392.imdb.model;
 import java.util.List;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class Movie {
 	public Movie () {
 		genres = new ArrayList<String> (4);
 	}
-	
+
 	public Movie (
 		String titleID, String title, int yearReleased, 
 		int lengthInMinutes, String primaryGenre, String mpaaRating

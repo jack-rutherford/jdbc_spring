@@ -197,22 +197,29 @@ public class MovieController {
 
     @GetMapping("movie/{titleId}")
     public String showMovieDetails(@PathVariable String titleId, Model model) {
-        List<String> errors = new LinkedList<String>();
-
+        List<String> errors = new LinkedList<String>();        
         try {
-            Movie movie = movieService.findMovieByID(titleId);
-            model.addAttribute("movie", movie);
-            
-            boolean hasPrimaryGenre = movie.getPrimaryGenre() != null && !movie.getPrimaryGenre().equals("");
-            model.addAttribute("hasPrimaryGenre", hasPrimaryGenre);
+            Movie movie = movieService.findMovieByID(titleId);  
+            if (movie != null) {
+                model.addAttribute("movie", movie);
+                boolean hasPrimaryGenre = movie.getPrimaryGenre() != null && !movie.getPrimaryGenre().equals("");
+                model.addAttribute("hasPrimaryGenre", hasPrimaryGenre);
 
-            boolean hasMPAARating = movie.getMpaaRating() != null && !movie.getMpaaRating().equals("");
-            model.addAttribute("hasMPAARating", hasMPAARating);
+                boolean hasMPAARating = movie.getMpaaRating() != null && !movie.getMpaaRating().equals("");
+                model.addAttribute("hasMPAARating", hasMPAARating);
+            }
+            else {
+                model.addAttribute("entityType", "movie");
+                model.addAttribute("id", titleId);                                
+                return "entity_not_found";
+            }
         }
         catch (SQLException e) {
-            errors.add("Error occurred retrieving movie details for " + titleId + "; " + e.getMessage());
+            errors.add("Error occurred retrieving movie details for " + titleId + ": " + e.getMessage());
+            model.addAttribute("errors", errors);
+            return "display_errors";
         }
-        model.addAttribute("errors", errors);
+                
         return "movie_details";
     }
 }
