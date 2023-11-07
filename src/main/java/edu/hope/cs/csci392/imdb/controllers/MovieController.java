@@ -115,9 +115,12 @@ public class MovieController {
         List<String> genres = new LinkedList<String>();
 
         List<String> errors = new LinkedList<String>();
-        
+
         int runningTime = q.runningTime.isPresent() ? q.runningTime.get() : -1;
         float minimumIMDBRating = q.IMDBRating.isPresent() ? q.IMDBRating.get() : -1;
+
+        String movieTitle = q.movieTitle.equals("null") ? "" : q.movieTitle;
+        String mpaaRating = q.mpaaRating.equals("null") ? "" : q.mpaaRating;
 
         if (!q.person1Name.equals("")) {
             if (q.person1Role.equals("null")) {
@@ -158,7 +161,7 @@ public class MovieController {
 
         try {
             List<Movie> movies = movieService.findMovies(
-                    q.movieTitle, q.year, q.runningTimeComparator, runningTime, q.mpaaRating, minimumIMDBRating,
+                    movieTitle, q.year, q.runningTimeComparator, runningTime, mpaaRating, minimumIMDBRating,
                     SearchType.valueOf(q.genreType.toUpperCase()), genres,
                     SearchType.valueOf(q.peopleType.toUpperCase()), people);
             model.addAttribute("movies", movies);
