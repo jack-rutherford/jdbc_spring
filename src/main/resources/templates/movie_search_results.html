@@ -31,8 +31,9 @@
 					<td th:text="${movie.mpaaRating}"></td>
 					<td th:text="${movie.runningTimeHoursAndMinutes}"></td>
 					<td th:text="${movie.genresAsCommaSeparatedString}"></td>
-					<td th:text="${movie.numberOfRatings > 0 ? movie.imdbRating : ''}"></td>
-					<td th:text="${movie.numberOfRatingsAsString}"></td>
+					<td th:text="${movie.numberOfRatings > 0 ? movie.imdbRating : ''}"></td>					
+					<td><a th:attr="title=${#numbers.formatDecimal(movie.numberOfRatings, 0, 'COMMA', 0, 'POINT')}" th:text="${movie.numberOfRatingsAsString}"></a></td>
+					
                     <td><a class="btn btn-dark" th:href="${'movie/' + movie.titleId + '/cast'}">Cast</a></td>			
 				</tr>
 			</tbody>
