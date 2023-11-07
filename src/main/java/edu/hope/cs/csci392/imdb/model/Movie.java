@@ -41,16 +41,6 @@ public class Movie {
 		if (numberOfRatings < 1000) {
 			return String.valueOf(numberOfRatings);
 		}
-		// else if (numberOfRatings < 10000) {
-		// 	int thousands = numberOfRatings / 1000;
-		// 	int hundreds = (numberOfRatings % 1000) / 100;
-		// 	return String.valueOf(thousands) + "." + String.valueOf(hundreds) + "K";
-		// }
-		// else if (numberOfRatings < 100000) {
-		// 	int tenThousands = numberOfRatings / 10000;
-		// 	int thousands = (numberOfRatings % 10000) / 1000;
-		// 	return String.valueOf(tenThousands) + "." + String.valueOf(thousands) + "K";
-		// }
 		else if (numberOfRatings < 1000000) {
 			int thousands = numberOfRatings / 1000;
 			int hundreds = (numberOfRatings % 1000) / 100;
