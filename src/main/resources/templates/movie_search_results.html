@@ -15,6 +15,7 @@
 				<tr>
 					<th>Title</th>
 					<th>Year</th>
+					<th>MPAA Rating</th>
 					<th>Running Time</th>					
 					<th>Genres</th>
 					<th>IMDB Rating</th>
@@ -27,6 +28,7 @@
 				<tr th:each="movie: ${movies}">
 					<td th:text="${movie.title}"></td>
 					<td th:text="${movie.yearReleased > 0 ? movie.yearReleased : ''}"></td>
+					<td th:text="${movie.mpaaRating}"></td>
 					<td th:text="${movie.runningTimeHoursAndMinutes}"></td>
 					<td th:text="${movie.genresAsCommaSeparatedString}"></td>
 					<td th:text="${movie.numberOfRatings > 0 ? movie.imdbRating : ''}"></td>
