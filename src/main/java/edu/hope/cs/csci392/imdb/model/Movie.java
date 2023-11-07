@@ -82,10 +82,11 @@ public class Movie {
 			}
 		}
 
-		buffer.append(minutes);
-		buffer.append(" ");
-		buffer.append(minutes > 1 ? "minutes" : "minute");
-
+		if (minutes > 0) {
+			buffer.append(minutes);
+			buffer.append(" ");
+			buffer.append(minutes > 1 ? "minutes" : "minute");
+		}
 		return buffer.toString();
 	}
 
