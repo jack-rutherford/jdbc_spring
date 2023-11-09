@@ -22,8 +22,8 @@
             <tbody>
                 <tr th:each="actor: ${actors}">
                     <td th:text="${actor.fullName}"></td>
-                    <td th:text="${actor.birthYear}"></td>
-                    <td th:text="${actor.deathYear}"></td>
+                    <td th:text="${actor.birthYear > 0 ? actor.birthYear : ''}"></td>
+                    <td th:text="${actor.deathYear > 0 ? actor.deathYear : ''}"></td>
 
                     <td><button class="btn btn-dark">Show Movies</button>
                 </tr>
