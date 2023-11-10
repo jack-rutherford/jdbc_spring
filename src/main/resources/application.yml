@@ -2,5 +2,5 @@ server:
     port: 80
 spring:
     datasource:
-        url: change.this.value
-        driver-class-name: change.this.value
+        url: localhost
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver

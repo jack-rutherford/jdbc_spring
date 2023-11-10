@@ -1,6 +1,9 @@
 package edu.hope.cs.csci392.imdb.services;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +25,17 @@ public class GenreService {
 	 */
 	public List<String> findGenres () throws SQLException {
 		ArrayList<String> genres = new ArrayList<String> ();
-		genres.add("Comedy");
-		genres.add("Drama");
-		genres.add("Romance");
-		genres.add("War");
-		
+		try(
+			Connection conn = connectionFactory.getConnection();
+			Statement stmt = conn.createStatement();
+		)
+		{ 
+			String sql = "select * from imdb.Genres order by Genre";
+			ResultSet results = stmt.executeQuery(sql);
+			while(results.next()){
+				genres.add(results.getString("Genre"));
+			}
+		}
 		return genres;
 	}
 }

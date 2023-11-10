@@ -1,5 +1,6 @@
 package edu.hope.cs.csci392.imdb.services;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +59,12 @@ public class ActorService {
 		int birthYear, int deathYear
 	) throws SQLException
 	{		
-		ArrayList<Actor> actors = new ArrayList<Actor> ();
-		actors.add (Database.hanks);
-		actors.add (Database.ryan);
-		return actors;		
+		try(Connection conn = connectionFactory.getConnection()){
+			ArrayList<Actor> actors = new ArrayList<Actor> ();
+			actors.add (Database.hanks);
+			actors.add (Database.ryan);
+			return actors;					
+		}
 	}
 
 	/**
