@@ -1,6 +1,9 @@
 package edu.hope.cs.csci392.imdb.services;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,13 +85,26 @@ public class MovieService {
 	 * rows that it is returning
 	 */
 	public List<Integer> getMovieYears() throws SQLException {
-		List<Integer> possibleYears = new ArrayList<Integer>();		
-		int maxYear = Year.now().getValue();
-		int minYear = maxYear - 20;
-
-		for (int i = maxYear; i > minYear; i--) {
-			possibleYears.add(i);
+		List<Integer> possibleYears = new ArrayList<Integer>();	
+		try(
+			Connection conn = connectionFactory.getConnection();
+			Statement stmt = conn.createStatement();
+		)
+		{ 
+			String sql = """
+				select MIN(YearReleased) [MinYear], MAX(YearReleased) [MaxYear]  from imdb.Movies
+			""";
+			ResultSet results = stmt.executeQuery(sql);
+			//ratings.add(results.getString("Rating"));
+			while(results.next()){
+				int minYear = results.getInt("MinYear");
+				int maxYear = results.getInt("MaxYear");
+				for (int i = maxYear; i > minYear; i--) {
+					possibleYears.add(i);
+				}
+			}
 		}
+		
 
 		return possibleYears;
 	}
