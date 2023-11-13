@@ -1,6 +1,9 @@
 package edu.hope.cs.csci392.imdb.services;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +22,26 @@ public class CategoryService {
 	 * are displayed first.   
 	 * @throws SQLException if an exception occurs connecting to the DB,
 	 * or in processing the results
+	 * 
+	 * 
 	 */
 	public List<String> findCategories() throws SQLException {
 		ArrayList<String> categories = new ArrayList<String>();
-		categories.add("actor");
-		categories.add("actress");
+		try(
+			Connection conn = connectionFactory.getConnection();
+			Statement stmt = conn.createStatement();
+		)
+		{ 
+			String sql = """
+				select Category, COUNT(Category) [CatergoryCount] from imdb.Principals
+				Group by Category
+				Order by CatergoryCount DESC
+			""";
+			ResultSet results = stmt.executeQuery(sql);
+			while(results.next()){
+				categories.add(results.getString("Category"));
+			}
+		}
 		return categories;
 	}
 }
