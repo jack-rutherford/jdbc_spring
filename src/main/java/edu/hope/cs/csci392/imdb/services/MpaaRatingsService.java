@@ -1,6 +1,9 @@
 package edu.hope.cs.csci392.imdb.services;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +35,30 @@ public class MpaaRatingsService {
 	 */
 	public List<String> findMPAARatings() throws SQLException {
 		ArrayList<String> ratings = new ArrayList<String>();
-		ratings.add("G");
-		ratings.add("PG");
+		try(
+			Connection conn = connectionFactory.getConnection();
+			Statement stmt = conn.createStatement();
+		)
+		{ 
+			String sql = """
+				SELECT Rating, COUNT(TitleID) [Movies per Rating] FROM imdb.MPAARatings
+				JOIN imdb.Movies on MPAARatings.Rating = Movies.MPAARating
+				where Rating not like 'TV%'
+				and not Rating = 'Unrated'
+				and not Rating = 'Not Rated' 
+				and YearReleased > 1970
+				and SortOrder is not null
+				group by Rating, SortOrder
+				having COUNT(TitleID) > 1000
+				order by SortOrder
+			""";
+			ResultSet results = stmt.executeQuery(sql);
+			while(results.next()){
+				ratings.add(results.getString("Rating"));
+			}
+		}
+		// ratings.add("G");
+		// ratings.add("PG");
 		return ratings;
 	}
 }
