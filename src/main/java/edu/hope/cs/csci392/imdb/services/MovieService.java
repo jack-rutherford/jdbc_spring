@@ -143,19 +143,18 @@ public class MovieService {
 	public Movie findMovieByID (String titleID) throws SQLException {
 		// Execute two separate queries: The first retrieves just the information in imdb.Movies for the given movie, 
 		// the second fetches any genres associated with the movie.
-		
 		Movie movie = null;
-
 		String sql1 = """
 			select * from imdb.Movies where TitleID = ?
 		""";
-		try (
+		try(
 			Connection conn = connectionFactory.getConnection();
 			PreparedStatement stmt1 = conn.prepareStatement(sql1)
-		) {
+		)
+		{
 			stmt1.setString(1, titleID);
 			ResultSet results1 = stmt1.executeQuery();
-			if (results1.next()) {
+			if(results1.next()){
 				movie = new Movie();
 				movie
 					.setTitleId(results1.getString("TitleID"))
@@ -166,16 +165,16 @@ public class MovieService {
 					.setImdbRating(results1.getFloat("IMDBRating"))
 					.setPrimaryGenre(results1.getString("PrimaryGenre"));
 			}
-			if (movie != null) {
+			if(movie != null){
 				String sql2 = """
 					select genre from imdb.MovieGenres where TitleID = ?
 				""";
-				try (
+				try(
 					PreparedStatement stmt2 = conn.prepareStatement(sql2)
-				) {
+				){
 					stmt2.setString(1, titleID);
 					ResultSet results2 = stmt2.executeQuery();
-					while (results2.next()) {
+					while(results2.next()){
 						movie.addGenre(results2.getString("genre"));
 					}
 				}

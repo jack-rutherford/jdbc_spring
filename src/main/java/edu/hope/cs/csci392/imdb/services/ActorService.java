@@ -81,10 +81,68 @@ public class ActorService {
 		int birthYear, int deathYear
 	) throws SQLException
 	{		
-		try(Connection conn = connectionFactory.getConnection()){
+		StringBuilder sql = new StringBuilder(1024);
+		sql.append("""
+			select distinct People.* from imdb.People
+			join imdb.Principals on People.PersonID = Principals.PersonID
+		""");
+		String connector = " where ";
+
+		if (firstName != null && !firstName.isEmpty()) {
+			sql.append(connector).append("FirstName = ?");
+			connector = " and ";
+		}
+
+		if (lastName != null && !lastName.isEmpty()) {
+			sql.append(connector).append("LastName = ?");
+			connector = " and ";
+		}
+
+		if (birthYear != -1) {
+			sql.append(connector).append("BirthYear = ?");
+			connector = " and ";
+		}
+
+		if (deathYear != -1) {
+			sql.append(connector).append("DeathYear = ?");
+		}
+
+		sql.append(connector);
+		sql.append("IsActor = 1");
+		connector = " and ";
+		sql.append(" order by LastName");
+		String sqlString = sql.toString();
+		try(
+			Connection conn = connectionFactory.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sqlString)
+		)
+		{
+			if(firstName != null && !firstName.isEmpty()){
+				stmt.setString(1, firstName);
+			}
+			if(lastName != null && !lastName.isEmpty()){
+				stmt.setString(2, lastName);
+			}
+			if(birthYear != -1){
+				stmt.setInt(3, birthYear);
+			}
+			if(deathYear != -1){
+				stmt.setInt(4, deathYear);
+			}
+			ResultSet results = stmt.executeQuery();
 			ArrayList<Actor> actors = new ArrayList<Actor> ();
-			actors.add (Database.hanks);
-			actors.add (Database.ryan);
+			while(results.next()){
+				Actor actor = new Actor();
+				actor
+					.setFirstName(results.getString("FirstName"))
+					.setLastName(results.getString("LastName"))
+					.setMiddleName(results.getString("MiddleName"))
+					.setFullName(results.getString("FullName"))
+					.setSuffix(results.getString("Suffix"))
+					.setBirthYear(results.getInt("BirthYear"))
+					.setDeathYear(results.getInt("DeathYear"));
+				actors.add(actor);
+			}
 			return actors;					
 		}
 	}
