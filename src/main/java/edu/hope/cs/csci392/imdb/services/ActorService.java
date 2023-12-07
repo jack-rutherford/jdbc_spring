@@ -1,6 +1,8 @@
 package edu.hope.cs.csci392.imdb.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +28,35 @@ public class ActorService {
 	 * or in processing the results
 	 */
 	public Actor findActorByID (String personID) throws SQLException {
-		if (personID.equals(Database.hanks.getPersonID())) {
-			return Database.hanks;
-		}
+		// if (personID.equals(Database.hanks.getPersonID())) {
+		// 	return Database.hanks;
+		// }
 		
-		if (personID.equals(Database.ryan.getPersonID())) {
-			return Database.ryan;
+		// if (personID.equals(Database.ryan.getPersonID())) {
+		// 	return Database.ryan;
+		// }
+		String sql = "select * from imdb.People where PersonID = ?";
+		try(
+			Connection conn = connectionFactory.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql)
+		)
+		{
+			stmt.setString(1, personID);
+			ResultSet results = stmt.executeQuery();
+			if(results.next()){
+				Actor actor = new Actor();
+				actor
+					.setFirstName(results.getString("FirstName"))
+					.setLastName(results.getString("LastName"))
+					.setMiddleName(results.getString("MiddleName"))
+					.setFullName(results.getString("FullName"))
+					.setSuffix(results.getString("Suffix"))
+					.setBirthYear(results.getInt("BirthYear"))
+					.setDeathYear(results.getInt("DeathYear"));
+				return actor;
+			}
+			return null;
 		}
-		
-		return null;
 	}
 	
     /**

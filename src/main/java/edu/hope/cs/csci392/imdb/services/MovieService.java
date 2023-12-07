@@ -1,6 +1,7 @@
 package edu.hope.cs.csci392.imdb.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import edu.hope.cs.csci392.imdb.ConnectionFactory;
 import edu.hope.cs.csci392.imdb.Database;
-
+import edu.hope.cs.csci392.imdb.model.Actor;
 import edu.hope.cs.csci392.imdb.model.Movie;
 import edu.hope.cs.csci392.imdb.model.Principal;
 import edu.hope.cs.csci392.imdb.model.Role;
@@ -140,14 +141,46 @@ public class MovieService {
 	 * or in processing the results
 	 */
 	public Movie findMovieByID (String titleID) throws SQLException {
-		if (titleID.equals(Database.sleepless.getTitleId())) {
-			return Database.sleepless;
-		}
+		// Execute two separate queries: The first retrieves just the information in imdb.Movies for the given movie, 
+		// the second fetches any genres associated with the movie.
 		
-		if (titleID.equals(Database.mail.getTitleId())) {
-			return Database.mail;
+		Movie movie = null;
+
+		String sql1 = """
+			select * from imdb.Movies where TitleID = ?
+		""";
+		try (
+			Connection conn = connectionFactory.getConnection();
+			PreparedStatement stmt1 = conn.prepareStatement(sql1)
+		) {
+			stmt1.setString(1, titleID);
+			ResultSet results1 = stmt1.executeQuery();
+			if (results1.next()) {
+				movie = new Movie();
+				movie
+					.setTitleId(results1.getString("TitleID"))
+					.setTitle(results1.getString("Title"))
+					.setYearReleased(results1.getInt("YearReleased"))
+					.setRunningTimeInMinutes(results1.getInt("RunningTimeInMinutes"))
+					.setMpaaRating(results1.getString("MPAARating"))
+					.setImdbRating(results1.getFloat("IMDBRating"))
+					.setPrimaryGenre(results1.getString("PrimaryGenre"));
+			}
+			if (movie != null) {
+				String sql2 = """
+					select genre from imdb.MovieGenres where TitleID = ?
+				""";
+				try (
+					PreparedStatement stmt2 = conn.prepareStatement(sql2)
+				) {
+					stmt2.setString(1, titleID);
+					ResultSet results2 = stmt2.executeQuery();
+					while (results2.next()) {
+						movie.addGenre(results2.getString("genre"));
+					}
+				}
+			}
 		}
-		
-		return null;
+		return movie;
 	}
 }
