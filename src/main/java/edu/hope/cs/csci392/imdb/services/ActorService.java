@@ -117,17 +117,22 @@ public class ActorService {
 			PreparedStatement stmt = conn.prepareStatement(sqlString)
 		)
 		{
+			int index = 1;
 			if(firstName != null && !firstName.isEmpty()){
-				stmt.setString(1, firstName);
+				stmt.setString(index, firstName);
+				index++;
 			}
 			if(lastName != null && !lastName.isEmpty()){
-				stmt.setString(2, lastName);
+				stmt.setString(index, lastName);
+				index++;
 			}
 			if(birthYear != -1){
-				stmt.setInt(3, birthYear);
+				stmt.setInt(index, birthYear);
+				index++;
 			}
 			if(deathYear != -1){
-				stmt.setInt(4, deathYear);
+				stmt.setInt(index, deathYear);
+				index++;
 			}
 			ResultSet results = stmt.executeQuery();
 			ArrayList<Actor> actors = new ArrayList<Actor> ();
