@@ -67,14 +67,95 @@ public class MovieService {
 	 * or in processing the results
 	 */
 	public List<Movie> findMovies (
-		String movieTitle, int year, String runningTimeComparator, 
-		int runningTimeValue, String mpaaRating, float minimumIMDBRating,
-		SearchType genreSearchType, List<String> genres, SearchType peopleSearchType, List<Principal> people
-	) throws SQLException {
-		ArrayList<Movie> movies = new ArrayList<Movie> ();
-		movies.add (Database.sleepless);
-		movies.add (Database.mail);
-		return movies;
+        String movieTitle, int year, String runningTimeComparator, 
+        int runningTimeValue, String mpaaRating, float minimumIMDBRating,
+        SearchType genreSearchType, List<String> genres, SearchType peopleSearchType, List<Principal> people
+    ) throws SQLException {    
+		StringBuilder sql = new StringBuilder (1024);
+        String connector = " where ";
+        sql.append("""
+				select * from imdb.Movies 
+		""");
+
+        if (movieTitle != null && !movieTitle.isEmpty()) {
+			sql.append(connector).append("Title = ?");
+			connector = " and ";
+        }
+		if (year != -1) {
+			sql.append(connector).append("YearReleased = ?");
+			connector = " and ";
+        }
+		if (runningTimeComparator != null && !runningTimeComparator.isEmpty() && runningTimeValue != -1) {
+			sql.append(connector).append("RunningTimeInMinutes ");
+			sql.append(runningTimeComparator);
+			sql.append(runningTimeValue);
+			connector = " and ";
+        }
+        if (mpaaRating != null && !mpaaRating.isEmpty()) {
+			sql.append(connector).append("MPAARating = ?");
+			connector = " and ";
+        }
+        if (minimumIMDBRating != -1) {
+			sql.append(connector).append("IMDBRating > ?");
+			connector = " and ";
+        }
+        if (genres != null && !genres.isEmpty() && genreSearchType == SearchType.ALL) {
+			for (String genre : genres) {
+				sql.append(connector);
+				sql.append( "exists( select 1 from imdb.MovieGenres where MovieGenres.Genre = '" + 
+							genre + "' and MovieGenres.TitleID = Movies.TitleID)");
+				connector = " and ";
+        	}
+        }
+        if (genres != null && !genres.isEmpty() && genreSearchType == SearchType.ANY) {
+        	connector = " and ( ";
+			for (String genre : genres) {
+				sql.append(connector);
+				sql.append( "exists( select 1 from imdb.MovieGenres where MovieGenres.Genre = '" + 
+							genre + "' and MovieGenres.TitleID = Movies.TitleID)");
+				connector = " or ";	
+        	}
+        	sql.append(")");
+        } 
+        try (
+			Connection conn = connectionFactory.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql.toString())
+		)
+		{
+			ArrayList<Movie> movies = new ArrayList<Movie> ();
+			
+			int index = 1;
+			if(movieTitle != null && !movieTitle.isEmpty()){
+				stmt.setString(index, movieTitle);
+				index++;
+			}
+			if(year != -1){
+				stmt.setInt(index, year);
+				index++;
+			}
+			if(mpaaRating != null && !mpaaRating.isEmpty()){
+				stmt.setString(index, mpaaRating);
+				index++;
+			}
+			if(minimumIMDBRating != -1){
+				stmt.setFloat(index, minimumIMDBRating);
+				index++;
+			}
+
+			ResultSet results = stmt.executeQuery();
+			while(results.next()){
+				Movie movie = new Movie();
+				movie
+					.setTitle(results.getString("Title"))
+					.setMpaaRating(results.getString("MPAARating"))
+					.setYearReleased(results.getInt("YearReleased"))
+					.setImdbRating(results.getInt("IMDBRating"))
+					.setRunningTimeInMinutes(results.getInt("RunningTimeInMinutes"))
+					.setGenres(genres);
+				movies.add(movie);
+			}
+        	return movies;  
+		}
 	}
     
 	/**
